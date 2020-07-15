@@ -1,4 +1,4 @@
-export default class Drawflow {
+class Drawflow {
   constructor(container, render = null) {
     this.events = {};
     this.container = container;
@@ -463,10 +463,28 @@ export default class Drawflow {
 
   drawConnection(ele) {
     var connection = document.createElementNS('http://www.w3.org/2000/svg',"svg");
+    var defs = document.createElementNS('http://www.w3.org/2000/svg',"defs");
+    var marker = document.createElementNS('http://www.w3.org/2000/svg',"marker");
+    var arrowPath = document.createElementNS('http://www.w3.org/2000/svg',"path");
+    marker.setAttributeNS(null, 'id', 'arrow');
+    marker.setAttributeNS(null, 'viewBox', '0 0 10 10');
+    marker.setAttributeNS(null, 'refX', '10');
+    marker.setAttributeNS(null, 'refY', '5');
+    marker.setAttributeNS(null, 'markerWidth', '10');
+    marker.setAttributeNS(null, 'markerHeight', '5');
+    marker.setAttributeNS(null, 'orient', 'auto');
+    marker.classList.add("marker");
+    arrowPath.setAttributeNS(null, 'd', 'M 0 0 L 10 5 L 0 10 z');
+    marker.appendChild(arrowPath);
+    defs.appendChild(marker);
+
+
+    connection.appendChild(defs);
     this.connection_ele = connection;
     var path = document.createElementNS('http://www.w3.org/2000/svg',"path");
     path.classList.add("main-path");
     path.setAttributeNS(null, 'd', '');
+    path.setAttributeNS(null, 'marker-end', 'url(#arrow)');
     // path.innerHTML = 'a';
     connection.classList.add("connection");
     connection.appendChild(path);
@@ -475,7 +493,7 @@ export default class Drawflow {
   }
 
   updateConnection(eX, eY) {
-    var path = this.connection_ele.children[0];
+    var path = this.connection_ele.children[1];
 
     var line_x = this.ele_selected.offsetWidth/2 + this.line_path/2 + this.ele_selected.parentElement.parentElement.offsetLeft + this.ele_selected.offsetLeft;
     var line_y = this.ele_selected.offsetHeight/2 + this.line_path/2 + this.ele_selected.parentElement.parentElement.offsetTop + this.ele_selected.offsetTop;
@@ -490,6 +508,7 @@ export default class Drawflow {
     // path.setAttributeNS(null, 'd', 'M '+ line_x +' '+ line_y +' L '+ x +' '+ y +''); // SIMPLE LINE
     // console.log('M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
     path.setAttributeNS(null, 'd', 'M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y);
+    path.setAttributeNS(null, 'id', 'ahahahah');
   }
 
   addConnection(id_output, id_input, output_class, input_class) {
@@ -514,6 +533,23 @@ export default class Drawflow {
         if(this.module === nodeOneModule) {
         //Draw connection
           var connection = document.createElementNS('http://www.w3.org/2000/svg',"svg");
+
+    /*var defs = document.createElementNS('http://www.w3.org/2000/svg',"defs");
+    var marker = document.createElementNS('http://www.w3.org/2000/svg',"defs");
+    var arrowPath = document.createElementNS('http://www.w3.org/2000/svg',"path");
+    marker.setAttributeNS(null, 'id', 'arrow');
+    marker.setAttributeNS(null, 'viewBox', '0 0 10 10');
+    marker.setAttributeNS(null, 'refX', '5');
+    marker.setAttributeNS(null, 'refY', '5');
+    marker.setAttributeNS(null, 'markerWidth', '6');
+    marker.setAttributeNS(null, 'markerHeight', '6');
+    marker.setAttributeNS(null, 'orient', 'auto-start-reverse');
+    arrowPath.setAttributeNS(null, 'd', 'M 0 0 L 10 5 L 0 10 z');
+    marker.appendChild(arrowPath);
+    defs.appendChild(marker);
+    connection.appendChild(defs);*/
+
+
           var path = document.createElementNS('http://www.w3.org/2000/svg',"path");
           path.classList.add("main-path");
           path.setAttributeNS(null, 'd', '');
@@ -562,7 +598,7 @@ export default class Drawflow {
       var hx1 = line_x + Math.abs(x - line_x) * curvature;
       var hx2 = x - Math.abs(x - line_x) * curvature;
       // console.log('M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
-      elemsOut[item].children[0].setAttributeNS(null, 'd', 'M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
+      elemsOut[item].children[1].setAttributeNS(null, 'd', 'M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
 
     })
 
@@ -586,7 +622,7 @@ export default class Drawflow {
       var hx1 = line_x + Math.abs(x - line_x) * curvature;
       var hx2 = x - Math.abs(x - line_x) * curvature;
       // console.log('M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
-      elems[item].children[0].setAttributeNS(null, 'd', 'M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
+      elems[item].children[1].setAttributeNS(null, 'd', 'M '+ line_x +' '+ line_y +' C '+ hx1 +' '+ line_y +' '+ hx2 +' ' + y +' ' + x +'  ' + y );
 
     })
   }
